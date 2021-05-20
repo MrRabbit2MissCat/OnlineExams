@@ -64,7 +64,7 @@ def index(request):
     if request.method == "GET":
         department = request.session.get("department", None)
         if department:
-            SQL = f"select * from questions where id = 1 or id=2 or id=3;"
+            SQL = f"select * from questions where {department} != '' and question_type in ('单选','多选','判断');"
             questions = Questions.objects.raw(SQL)
             result = question_list(questions)
             return render(
