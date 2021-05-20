@@ -19,7 +19,7 @@
         {#console.log({{ data }})#}
         var questions =
         {{ data|safe }}
-        var itemList = ["A", "B", "C", "D", "E", "F"]
+        var itemList = ["A", "B", "C", "D", "E", "F", "G"]
         var activeQuestion = 0; //当前操作的考题编号
         var questioned = 0; //
         var checkQues = []; //已做答的题的集合
@@ -66,6 +66,7 @@
             }
             $(".question").attr("id", "question" + id);
             $("#ques" + id).removeClass("active_question_id").addClass("question_id");
+
             for (var i = 0; i < checkQues.length; i++) {
                 if (checkQues[i].id == id) {
                     $("#" + checkQues[i].item).find("input").prop("checked", "checked");
@@ -101,7 +102,7 @@
                     checkQues[i].answer = $("#" + id).find("input[name=item]:checked").val();//获取当前考题的选项值
                 }
             }
-            if (checkQues.length == 0 || Question != activeQuestion && activeQuestion != ques) {
+            if (checkQues.length >= 0 || Question != activeQuestion && activeQuestion != ques) {
                 var check = {};
                 check.id = activeQuestion;//获取当前考题的编号
                 check.item = id;//获取当前考题的选项ID
@@ -120,7 +121,8 @@
 
         /*设置进度条*/
         function progress() {
-            var prog = ($(".active_question_id").length + 1) / questions.length;
+            {#var prog = ($(".active_question_id").length+1) / questions.length;#}
+            var prog = checkQues.length / questions.length;
             var pro = $(".progress").parent().width() * prog;
             $(".progres").text((prog * 100).toString().substr(0, 5) + "%")
             $(".progress").animate({
@@ -179,8 +181,21 @@
 
             //提交试卷
             $("#submitQuestions").click(function () {
-                /*alert(JSON.stringify(checkQues));*/
-                alert("已做答:" + ($(".clickQue").length) + "道题,还有" + (questions.length - ($(".clickQue").length)) + "道题未完成");
+                var last_question = questions.length - ($(".clickQue").length);
+                if (last_question > 0) {
+                    alert("已做答:" + ($(".clickQue").length) + "道题,还有" + last_question + "道题未完成");
+
+                } else {
+                    var right = 0
+                    for (var i = 0; i < questions.length; i++) {
+
+                        if (questions[i]["questionAnswer"][0] == checkQues[i]["answer"]) {
+                            right = right + 1
+                        }
+                    }
+                    alert("正确:" + right + "道题,错误" + (questions.length - right) + "道题");
+                }
+
             })
             //进入下一题
             $("#nextQuestion").click(function () {
@@ -189,11 +204,16 @@
             })
             //进入上一题
             $("#lastQuestion").click(function () {
-                if ((activeQuestion - 1) >= 0) showQuestion(activeQuestion - 1);
-                showQuestion(activeQuestion)
+                if ((activeQuestion - 1) >= 0) {
+                    showQuestion(activeQuestion - 1);
+                } else {
+                    showQuestion(activeQuestion)
+                }
+
             })
         })
 
+        /* 退出函数 */
         function exit() {
             $.ajax({
                 type: 'get',
@@ -211,7 +231,7 @@
 
 <div>
     <div class="col-md-1"></div>
-    <div class="col-md-10">
+    <div class="col-md-10" style="width: 95%">
         <div class="content">
             <div style="width: 100%;height:auto;display: inline-block;border: 1px solid white;position: relative;margin-top:10px;">
                 <div style="width: 100%;">
@@ -255,11 +275,11 @@
                                 <div style="color:#ffffff;background: red;width: 22px;height: 22px;border-radius:11px;line-height:22px;font-size:13px; text-align: center;"
                                      class="glyphicon glyphicon-map-marker"></div>
                                 [单选题]
-                                <div class="btn-group" style="left: 580px;">
+                                <div class="btn-group" style="left: 680px;">
                                     <button class="btn btn-default" type="button" onClick="location.reload()">刷新
                                     </button>
                                 </div>
-                                <div class="btn-group" style="left: 580px;">
+                                <div class="btn-group" style="left: 680px;">
                                     <button class="btn btn-default" type="button" onclick="exit()">退出
                                     </button>
                                 </div>

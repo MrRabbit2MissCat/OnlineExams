@@ -6,6 +6,10 @@ from index.models import Questions
 
 
 # Create your views here.
+def get_answer(title):
+    answer = re.findall(r'（(.*?)）', title)
+    return answer
+
 
 def question_list(questions):
     questions_list = []
@@ -15,11 +19,12 @@ def question_list(questions):
         content_list = content.split("\n")
         title = content_list[0]
         items = ";".join([re.sub(r'[A-F].', '', item) for item in content_list[1:]])
+        answer = get_answer(title)
         questions_list.append(
             {"questionId": f"{question_id}",
              "questionTitle": f"{title}",
              "questionItems": f"{items}",
-             "questionAnswer": "c"
+             "questionAnswer": answer
              }
         )
     return json.dumps(questions_list)
@@ -59,7 +64,7 @@ def index(request):
     if request.method == "GET":
         department = request.session.get("department", None)
         if department:
-            SQL = f"select * from questions where technology_business_department != '';"
+            SQL = f"select * from questions where id = 1 or id=2 or id=3;"
             questions = Questions.objects.raw(SQL)
             result = question_list(questions)
             return render(
@@ -69,10 +74,12 @@ def index(request):
             )
 
 
+@login_vaild
 def exit_login(request):
     if request.method == "GET":
         response = HttpResponse()
         response.delete_cookie('username')
+        response.delete_cookie('sessionid')
         request.session.delete("name")
         request.session.delete("department")
         return response
