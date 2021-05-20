@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    {% load static %}
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>登录界面</title>
+    <link rel="icon" href="{% static 'image/favicon.ico' %}"
+          mce_href={% static 'image/favicon.ico' %} type="image/x-icon">
+    <link href="{% static 'css/login.css' %}" type="text/css" rel="stylesheet">
+</head>
+<body>
+
+<div class="login">
+    <div class="message">合规认证考试练习系统</div>
+    <div id="darkbannerwrap"></div>
+
+    <form id="login-form" method="post" onsubmit="return false;">
+        <input id="username" name="username" placeholder="用户名" type="text" autocomplete="off">
+        <hr class="hr15">
+        <select id="department_type">
+            <option id="department" value="retail_credit_department">零售信贷部</option>
+            <option id="department" value="corporate_credit_department">公司信贷部</option>
+            <option id="department" value="customer_service">客户服务部</option>
+            <option id="department" value="marketing_department">市场部</option>
+            <option id="department" value="brand_public_relations_department">品牌公关部</option>
+            <option id="department" value="the_brand_sales_department">本品牌销售部</option>
+            <option id="department" value="multi-brand_sales_department">多品牌销售部</option>
+            <option id="department" value="used_car_business_department">二手车业务部</option>
+            <option id="department" value="technology_business_department">科技业务部</option>
+            <option id="department" value="big_data_platform_department">大数据平台部</option>
+            <option id="department" value="ministry_of_science_and_technology">科技技术部</option>
+            <option id="department" value="risk_management_department">风险管理部</option>
+            <option id="department" value="financial_accounting_department">财务会计部</option>
+            <option id="department" value="integrated_management_department">综合管理部</option>
+            <option id="department" value="operation_management_department">经营管理部</option>
+            <option id="department" value="internal_audit_section">内部审计科</option>
+            <option id="department" value="legal_compliance_department">法务合规部</option>
+        </select>
+        <hr class="hr15">
+        <button style="width: 100%;" type="submit" onclick="login(this)">登录</button>
+        <hr class="hr20">
+        <span id="info" style="color: red"></span>
+    </form>
+</div>
+
+
+<script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
+<script src="{% static 'js/common.js' %}"></script>
+<script type="text/javascript">
+    $.ajaxSetup({
+        data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        }
+    })
+
+    function login(obj) {
+        $(obj).attr("disabled", true);
+        var username = $.trim($('#username').val());
+        if (username === "") {
+            $("#info").html('用户名不能为空');
+            $(obj).attr("disabled", false);
+        } else {
+            let name = $("#username").val()
+            let department_type = $("#department_type").val()
+            let Data = {
+                "username": name, "department": department_type
+            }
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'login' %}",
+                data: Data,
+                success: function () {
+                    location.href = "{% url 'index' %}"
+                }
+            });
+
+        }
+    }
+</script>
+</body>
+</html>
