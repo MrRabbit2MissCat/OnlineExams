@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ki#hx4#5!gg1o7qmw0&4-^8pqcs1gb-&w0an%@y&r^qe^q&(ar'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -80,7 +80,7 @@ DATABASES = {
         {
             'ENGINE': 'django.db.backends.mysql',  # 数据库引擎
             'NAME': 'online_exams',  # 数据库名称
-            'HOST': '127.0.0.1',  # 数据库地址，本机 ip 地址 127.0.0.1
+            'HOST': '10.50.128.163',  # 数据库地址，本机 ip 地址 127.0.0.1
             'PORT': 3306,  # 端口
             'USER': 'root',  # 数据库用户名
             'PASSWORD': '123456',  # 数据库密码
@@ -122,7 +122,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+STATIC_ROOT = 'static'
+STATICFILES_DIRS = (os.path.join(BASE_DIR, '/static/'),)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

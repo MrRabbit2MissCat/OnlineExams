@@ -16,10 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from index import views
+from django.views import static
+from django.conf.urls import url
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.login, name='login'),
     path('index/', views.index, name='index'),
-    path('exit/', views.exit_login, name='exit')
+    path('exit/', views.exit_login, name='exit'),
+    url(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT}, name='static'),
 ]
