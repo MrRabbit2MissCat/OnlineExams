@@ -3,6 +3,7 @@ import re
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from index.models import Questions
+from user.models import User
 
 
 # Create your views here.
@@ -51,6 +52,10 @@ def login(request):
     elif request.method == "POST":
         name = request.POST["username"]
         department = request.POST["department"]
+        try:
+            User.objects.create(username=name, department=department).save()
+        except Exception as e:
+            print(e)
         response = HttpResponse()
         response.set_signed_cookie("username", name.encode("utf-8"), salt="~!@#")
         request.session["name"] = name
