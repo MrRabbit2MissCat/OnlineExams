@@ -7,5 +7,5 @@ class User(models.Model):
     department = models.CharField(max_length=150)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'user'

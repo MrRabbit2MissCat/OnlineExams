@@ -6,8 +6,8 @@ class Questions(models.Model):
     id = models.IntegerField(primary_key=True)
     type = models.CharField(max_length=50)
     question_type = models.CharField(max_length=50)
-    question = models.CharField(max_length=255)
-    analyze = models.CharField(max_length=255, blank=True, null=True)
+    question = models.CharField(max_length=2500)
+    analyze = models.CharField(max_length=2500, blank=True, null=True)
     retail_credit_department = models.CharField(max_length=100, blank=True, null=True)
     corporate_credit_department = models.CharField(max_length=100, blank=True, null=True)
     customer_service = models.CharField(max_length=100, blank=True, null=True)
@@ -29,5 +29,5 @@ class Questions(models.Model):
     legal_compliance_department = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'questions'
