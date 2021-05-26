@@ -22,12 +22,10 @@
         <input id="username" name="username" placeholder="用户名" type="text" autocomplete="off">
         <hr class="hr15">
         <ul class="dowebok">
-            <li><input name="checkbox" type="checkbox" data-labelauty="单选" checked="checked"></li>
-            <li><input name="checkbox" type="checkbox" data-labelauty="多选"></li>
-            <li><input name="checkbox" type="checkbox" data-labelauty="判断"></li>
+            <li><input name="checkbox" type="checkbox" data-labelauty="单选" value="单选" checked="checked"></li>
+            <li><input name="checkbox" type="checkbox" data-labelauty="多选" value="多选"></li>
+            <li><input name="checkbox" type="checkbox" data-labelauty="判断" value="判断"></li>
         </ul>
-
-
         <hr class="hr15">
         <select id="department_type">
             <option id="department" value="retail_credit_department">零售信贷部</option>
@@ -78,8 +76,15 @@
         } else {
             let name = $("#username").val()
             let department_type = $("#department_type").val()
+            let question_type = ''
+            $("input[name='checkbox'][checked]").each(function () {
+                let value = $(this).attr("value");
+                question_type=question_type+"'"+value+"'"+':';
+            })
             let Data = {
-                "username": name, "department": department_type
+                "username": name,
+                "department": department_type,
+                "questions_type": question_type
             }
             $.ajax({
                 type: 'POST',

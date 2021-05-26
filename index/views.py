@@ -57,6 +57,7 @@ def login(request):
     elif request.method == "POST":
         name = request.POST["username"]
         department = request.POST["department"]
+        questions_type = request.POST["questions_type"].split(":")[:-1]
         try:
             User.objects.create(username=name, department=department).save()
         except Exception as e:
@@ -65,6 +66,7 @@ def login(request):
         response.set_signed_cookie("username", name.encode("utf-8"), salt="~!@#")
         request.session["name"] = name
         request.session["department"] = department
+        request.session["question_type"] = questions_type
         request.session.set_expiry(0)
         return response
 
@@ -73,8 +75,10 @@ def login(request):
 def index(request):
     if request.method == "GET":
         department = request.session.get("department", None)
+        question_type = request.session.get("question_type", None)
+        qt = ','.join(question_type)
         if department:
-            SQL = f"select * from questions where {department} != '' and question_type in ('单选');"
+            SQL = f"select * from questions where {department} != '' and question_type in ({qt});"
             questions = Questions.objects.raw(SQL)
             result = question_list(questions)
             return render(
@@ -90,6 +94,5 @@ def exit_login(request):
         response = HttpResponse()
         response.delete_cookie('username')
         response.delete_cookie('sessionid')
-        request.session.delete("name")
-        request.session.delete("department")
+        request.session.flush()
         return response
