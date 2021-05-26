@@ -16,17 +16,22 @@ def question_list(questions):
     questions_list = []
     for question in questions:
         question_id = question.id
+        question_type = question.question_type
         content = question.question
         content_list = content.split("\n")
+        # 去除题目内的答案
+        # title = re.sub(r"[A-F]", "", content_list[0])
         title = content_list[0]
-        items = ";".join([re.sub(r'[A-F].', '', item) for item in content_list[1:]])
+        items = "|".join([re.sub(r'[A-F][.，,、]?', '', item) for item in content_list[1:]])
         answer = get_answer(title)
         questions_list.append(
-            {"questionId": f"{question_id}",
-             "questionTitle": f"{title}",
-             "questionItems": f"{items}",
-             "questionAnswer": answer
-             }
+            {
+                "questionId": f"{question_id}",
+                "questionType": f"{question_type}",
+                "questionTitle": f"{title}",
+                "questionItems": f"{items}",
+                "questionAnswer": answer
+            }
         )
     return json.dumps(questions_list)
 
@@ -69,7 +74,7 @@ def index(request):
     if request.method == "GET":
         department = request.session.get("department", None)
         if department:
-            SQL = f"select * from questions where {department} != '' and question_type in ('单选','多选','判断');"
+            SQL = f"select * from questions where {department} != '' and question_type in ('单选');"
             questions = Questions.objects.raw(SQL)
             result = question_list(questions)
             return render(

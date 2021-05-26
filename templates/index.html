@@ -57,13 +57,25 @@
             $(".question").find(".question_info").remove();
             var question = questions[id];
             $(".question_title").html("<strong>第 " + (id + 1) + " 题 、</strong>" + question.questionTitle);
-            var items = question.questionItems.split(";");
+            var question_type = question.questionType
+            var items = question.questionItems.split("|");
             var item = "";
-            for (var i = 0; i < items.length; i++) {
-                item = "<li class='question_info' onclick='clickTrim(this)' id='item"
-                    + i + "'><input type='radio' name='item' value='" + itemList[i] + "'>&nbsp;" + itemList[i] + "." + items[i] + "</li>";
-                $(".question").append(item);
+            if (question_type === "单选") {
+                for (var i = 0; i < items.length; i++) {
+                    item = "<li class='question_info' onclick='clickTrim(this)' id='item"
+                        + i + "'><input type='radio' name='item' value='" + itemList[i] + "'>&nbsp;" + itemList[i] + "." + items[i] + "</li>";
+
+                    $(".question").append(item);
+                }
+            } else {
+                for (var i = 0; i < items.length; i++) {
+                    item = "<li class='question_info' onclick='clickTrim(this)' id='item"
+                        + i + "'><input type='checkbox' name='item' value='" + itemList[i] + "'>&nbsp;" + itemList[i] + "." + items[i] + "</li>";
+
+                    $(".question").append(item);
+                }
             }
+
             $(".question").attr("id", "question" + id);
             $("#ques" + id).removeClass("active_question_id").addClass("question_id");
 
@@ -246,11 +258,11 @@
                                         <div class="progress pull-left"
                                              style="background: #609E53;width: 0px;height:18px;position:absolute;left: 0px;"></div>
                                         <div class="pro-text"
-                                             style="left: 0px;color: #609E53;position:absolute;top:0px;width:100%;"> 已完成<span
+                                             style="left: 0px;color: #609E53;position:absolute;top:0px;width:100%;font-size: 16px;"> 已完成<span
                                                 class="progres"></span></div>
                                     </div>
                                     <div class="pull-left"
-                                         style=" width:135px;line-height:20px;height:20px;margin:15px;font-size:15px;">
+                                         style=" width:145px;line-height:20px;height:20px;margin:15px;font-size:16px;">
                                         <!--已做答的数量和考题总数-->
                                         当前第<span class="questioned"></span>题/共<span class="question_sum"></span>题
                                     </div>

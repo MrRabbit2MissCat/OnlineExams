@@ -1,5 +1,6 @@
 .content{
     width: 100%;
+    font-size: large;
 }
 .top{
     width: 100%;
@@ -97,12 +98,13 @@
 .question_title{
     height: 50px;
     margin: 0px;
+    font-size: large;
 }
 .question_info{
     padding-left: 20px;
     border: 1px solid #CCC;
     line-height: 45px;
-    height: 45px;
+    /*height: 45px;*/
     cursor:pointer;
     margin: 10px 0px 10px 0px;
 }

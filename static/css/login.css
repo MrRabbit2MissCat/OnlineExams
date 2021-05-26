@@ -60,7 +60,7 @@ a.logo{
 input[type=text],
 input[type=file],
 input[type=password],
-input[type=email], select, option {
+input[type=email], select, option{
     border: 1px solid #DCDEE0;
     vertical-align: middle;
     border-radius: 3px;

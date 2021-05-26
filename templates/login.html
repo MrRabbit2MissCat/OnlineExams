@@ -10,6 +10,7 @@
     <link rel="icon" href="{% static 'image/favicon.ico' %}"
           mce_href={% static 'image/favicon.ico' %} type="image/x-icon">
     <link href="{% static 'css/login.css' %}" type="text/css" rel="stylesheet">
+    <link href="{% static 'css/jquery-labelauty.css' %}" type="text/css" rel="stylesheet">
 </head>
 <body>
 
@@ -19,6 +20,14 @@
 
     <form id="login-form" method="post" onsubmit="return false;">
         <input id="username" name="username" placeholder="用户名" type="text" autocomplete="off">
+        <hr class="hr15">
+        <ul class="dowebok">
+            <li><input name="checkbox" type="checkbox" data-labelauty="单选" checked="checked"></li>
+            <li><input name="checkbox" type="checkbox" data-labelauty="多选"></li>
+            <li><input name="checkbox" type="checkbox" data-labelauty="判断"></li>
+        </ul>
+
+
         <hr class="hr15">
         <select id="department_type">
             <option id="department" value="retail_credit_department">零售信贷部</option>
@@ -49,12 +58,16 @@
 
 <script src="{% static 'js/jquery-1.9.1.min.js' %}"></script>
 <script src="{% static 'js/common.js' %}"></script>
+<script src="{% static 'js/jquery-labelauty.js' %}"></script>
 <script type="text/javascript">
     $.ajaxSetup({
         data: {
             csrfmiddlewaretoken: '{{ csrf_token }}'
         }
     })
+    $(function () {
+        $(':input').labelauty();
+    });
 
     function login(obj) {
         $(obj).attr("disabled", true);
